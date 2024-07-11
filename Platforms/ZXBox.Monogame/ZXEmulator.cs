@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Threading.Tasks;
+using ZXBox.Snapshot;
 
 namespace ZXBox.Monogame;
 
@@ -44,11 +47,23 @@ public class ZXEmulator : Game
         base.Initialize();
     }
 
-    protected override void LoadContent()
+    protected override async void LoadContent()
     {
         spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // TODO: use this.Content to load your game content here
+        await Task.Delay(5000);
+        await LoadGame("ManicMiner.z80");
+    }
+
+    private async Task LoadGame(string filename)
+    {
+        var ms = new MemoryStream();
+        var handler = FileFormatFactory.GetSnapShotHandler(filename);
+        var stream = new FileStream("Platforms/ZXBox.Monogame/Roms/" + filename + ".json", FileMode.Open);
+        await stream.CopyToAsync(ms);
+        var bytes = ms.ToArray();
+        handler.LoadSnapshot(bytes, speccy);
     }
 
     protected override void Update(GameTime gameTime)
