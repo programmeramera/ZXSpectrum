@@ -1,0 +1,74 @@
+﻿
+@font-face {
+    font-family: 'Easy Speech';
+    src: url('/css/Easy Speech_free.ttf');
+}
+.cls-1 {
+    fill: none;
+    stroke: #fff;
+    stroke-dasharray: 0 0 19.37 19.37;
+    stroke-width: 11px;
+}
+
+.cls-1, .cls-2, .cls-3, .cls-4, .cls-5 {
+    stroke-miterlimit: 10;
+}
+
+.cls-2, .cls-3, .cls-4, .cls-5 {
+    stroke: #000;
+}
+
+.cls-2, .cls-3, .cls-5 {
+    stroke-width: 6px;
+}
+
+.cls-2, .cls-4 {
+    fill: #5e5858;
+}
+
+.cls-6, .cls-3 {
+    fill: #fff;
+}
+
+.cls-7 {
+    fill: #3a1f0d;
+}
+
+.cls-4 {
+    stroke-width: 3px;
+}
+
+.cls-8 {
+    font-family: MyriadPro-Regular, 'Myriad Pro';
+}
+
+.cls-8, .cls-9 {
+    font-size: 75px;
+}
+
+.cls-9 {
+    fill: #173577;
+    font-family: EasySpeech, 'Easy Speech';
+    text-align:center;
+}
+
+.cls-5 {
+    fill: #898989;
+}
+
+#Spool_Left,#Spool_Right {
+    animation: SpoolRotation 3000ms linear reverse infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+@keyframes SpoolRotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
