@@ -10,13 +10,13 @@ public class ZXEmulator : Game
 {
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
-    private Texture2D texture;
     private int width = 256 + 20 * 2;
     private int height = 192 + 20 * 2  ;
     private ZXBox.ZXSpectrum speccy;
-    byte[] backBuffer;
+    private const int SCALE = 2;
     int flashcounter = 16;
     bool flash=false;
+    Hardware.Screen screen;
     
     public ZXEmulator()
     {
@@ -27,15 +27,20 @@ public class ZXEmulator : Game
 
     protected override void Initialize()
     {
-        graphics.PreferredBackBufferHeight = height;
-        graphics.PreferredBackBufferWidth = width;
+        graphics.PreferredBackBufferHeight = height * SCALE;
+        graphics.PreferredBackBufferWidth = width * SCALE;
         graphics.ApplyChanges();
         
+        var keyboard = new Hardware.Keyboard(this);
+        this.Components.Add(keyboard);
+
         speccy = new ZXSpectrum(true, true, 20, 20, 20);
+        speccy.InputHardware.Add(keyboard);
         speccy.Reset();
 
-        texture = new Texture2D(GraphicsDevice, width, height);
-        backBuffer = new byte[width * height * sizeof(uint)];   
+        screen = new Hardware.Screen(this, width, height, SCALE);
+        this.Components.Add(screen);
+
         base.Initialize();
     }
 
@@ -63,21 +68,14 @@ public class ZXEmulator : Game
             flashcounter--; 
         }
 
-        var screen = speccy.GetScreenInBytes(flash);
-        var MAX = width * height * sizeof(uint);
-        var elementsToWrite = screen.Length > MAX ? MAX : screen.Length;
-        System.Buffer.BlockCopy(screen, 0, backBuffer, 0, screen.Length);
-        texture.SetData<byte>(backBuffer, 0, backBuffer.Length );
-        
+        screen.SetPixels(speccy.GetScreenInBytes(flash));
+
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color. CornflowerBlue);
-        spriteBatch.Begin();
-        spriteBatch.Draw(texture, Vector2.Zero, Color.White);   
-        spriteBatch.End();
         base.Draw(gameTime);
     }
 }
