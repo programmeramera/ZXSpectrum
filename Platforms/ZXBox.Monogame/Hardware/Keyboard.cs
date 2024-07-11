@@ -9,14 +9,14 @@ namespace ZXBox.Monogame.Hardware;
 public class Keyboard : GameComponent, IInput{
     private XnaInput.KeyboardState oldState;
     public List<string> KeyBuffer = new List<string>();
-    int NoKeyCounter = 0;
-    bool SymbolShift = false;
-    int sectionnumber = 1;
+    // int NoKeyCounter = 0;
+    // bool SymbolShift = false;
+    // int sectionnumber = 1;
     bool up = false;
     bool down = false;
     bool left = false;
     bool right = false;
-    bool fire = false;
+    // bool fire = false;
     
     public Keyboard(Game game) : base(game) {}
 
@@ -56,7 +56,7 @@ public class Keyboard : GameComponent, IInput{
                 right = true;
             }
 
-            bool symbol = false;
+            // bool symbol = false;
             int returnvalue = 0xFF;
 
             //Special cace for any key

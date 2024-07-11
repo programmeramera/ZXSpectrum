@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\Roms\ManicMiner.z80.json">
+    <Content Update="..\..\Roms\ManicMiner.z80.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
