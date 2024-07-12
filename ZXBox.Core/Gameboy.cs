@@ -18,7 +18,7 @@ public class Gameboy : LR35902
     public List<IInput> InputHardware = new List<IInput>();
     public List<IOutput> OutputHardware = new List<IOutput>();
 
-    int bank = 0;
+    // int bank = 0;
     int rom = 0;
     public override void WriteByteToMemory(int address, int bytetowrite)
     {

@@ -101,8 +101,8 @@ namespace ZXBox.Core.Hardware.Input
         public long CurrentTstate = 0;
         public long TotalTstates = 0;
 
-        private long lastTstate = 0;
-        private long diff = 0;
+        // private long lastTstate = 0;
+        // private long diff = 0;
         int returnvalue = 0xff;
         EarValue ear;
         bool firstread = true;

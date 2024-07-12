@@ -702,7 +702,7 @@ public partial class Z80
         //SubtractNumberOfTStatesLeft( tstates;
     }
 
-    int ldimemval = 0;
+    // int ldimemval = 0;
     public void LDI()
     {
         int ldimemval = ReadByteFromMemory(HL);
@@ -1335,7 +1335,8 @@ public partial class Z80
         return (a - 1) & 0xff;
     }
 
-    bool cpdrc, cpdrpv;
+    // bool cpdrc; 
+    bool cpdrpv;
     /// <summary>
     /// Block compare with decrement
     /// </summary>

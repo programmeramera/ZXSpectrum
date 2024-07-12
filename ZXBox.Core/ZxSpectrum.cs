@@ -11,7 +11,7 @@ public class ZXSpectrum : Zilog.Z80
     public List<byte[]> Banks = new List<byte[]> { new byte[0x4000], new byte[0x4000], new byte[0x4000], new byte[0x4000], new byte[0x4000], new byte[0x4000], new byte[0x4000] };
 
     Screen speccyscreen;
-    byte[] romBytes;
+    // byte[] romBytes;
 
     public ZXSpectrum(bool renderBorder = true, bool loadRom = true, int borderTop = 48, int borderBottom = 56, int borderSide = 64, RomEnum rom = RomEnum.ZXSpectrum48k)
     {

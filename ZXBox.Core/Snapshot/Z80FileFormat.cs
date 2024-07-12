@@ -160,7 +160,6 @@ public class Z80FileFormat : ISnapshot
                 case 5:     //Normal c000-ffff
                     MemoryHandler.LoadBytesintoMemory(mb.MemoryData.ToArray(), 0xc000, cpu);
                     break;
-                    break;
                 //case 3:
                 case 8:     //Normal 4000-7ffff
                     //Loaded from 3

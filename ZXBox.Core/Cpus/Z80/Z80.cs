@@ -432,7 +432,7 @@ public abstract partial class Z80
     public int SP = 0x10000;
     protected int opcode = 0;
     protected int _numberOfTStatesLeft;
-    int diff = 0;
+    // int diff = 0;
     public void SubtractNumberOfTStatesLeft(int tstates = 0)
     {
         _numberOfTStatesLeft -= tstates;
@@ -556,13 +556,13 @@ public abstract partial class Z80
     public int NumberOfTstates = 0;
 
     public StringBuilder sb = new StringBuilder();
-    private DateTime start;
-    public void DoIntructions(int numberOfTStates = 69888)
+    // private DateTime start;
+    public void DoInstructions(int numberOfTStates = 69888)
     {
-        DoIntructions(numberOfTStates, null);
+        DoInstructions(numberOfTStates, null);
     }
 
-    public virtual void DoIntructions(int numberOfTStates, Func<Z80, int> gameSpecificFunc)
+    public virtual void DoInstructions(int numberOfTStates, Func<Z80, int> gameSpecificFunc)
     {
         NumberOfTstates = numberOfTStates;
         _numberOfTStatesLeft += numberOfTStates;

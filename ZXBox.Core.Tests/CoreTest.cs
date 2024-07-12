@@ -51,7 +51,7 @@ namespace ZXBox.Core.Tests
             z80.R = ts.r;
             z80.SP = ts.sp;
 
-            z80.DoIntructions(ts.end_tstates2);
+            z80.DoInstructions(ts.end_tstates2);
 
             TestState tsout = TestfileHandler.ReadOUTFile(Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + ".out", ts.Memory);
 

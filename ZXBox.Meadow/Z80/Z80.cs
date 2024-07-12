@@ -554,12 +554,12 @@ namespace Zilog
         public int NumberOfTstates = 0;
         public StringBuilder sb = new StringBuilder();
         private DateTime start;
-        public void DoIntructions(int numberOfTStates)
+        public void DoInstructions(int numberOfTStates)
         {
-            DoIntructions(numberOfTStates, null);
+            DoInstructions(numberOfTStates, null);
         }
 
-        public void DoIntructions(int numberOfTStates, Func<Z80, int> gameSpecificFunc)
+        public void DoInstructions(int numberOfTStates, Func<Z80, int> gameSpecificFunc)
         {
             //sb = new StringBuilder();
             NumberOfTstates = numberOfTStates;

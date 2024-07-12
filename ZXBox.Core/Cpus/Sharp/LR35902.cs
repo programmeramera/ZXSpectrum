@@ -21,7 +21,7 @@ namespace ZXBox.Core.Cpus.Sharp
         }
 
         //This is implemented base on information found here https://gbdev.io/pandocs/CPU_Comparison_with_Z80.html
-        public override void DoIntructions(int numberOfTStates, Func<Z80, int> gameSpecificFunc)
+        public override void DoInstructions(int numberOfTStates, Func<Z80, int> gameSpecificFunc)
         {
             NumberOfTstates = numberOfTStates;
             _numberOfTStatesLeft += numberOfTStates;
