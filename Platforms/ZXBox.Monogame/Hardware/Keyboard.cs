@@ -27,7 +27,6 @@ public class Keyboard : GameComponent, IInput{
     
     public int Input(int Port, int tstates)
     {
-
         if ((Port & 0xFF) == 0xFE)
         {
             down = false;
