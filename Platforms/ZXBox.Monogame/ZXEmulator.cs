@@ -59,7 +59,7 @@ public class ZXEmulator : Game
     protected override async void LoadContent()
     {
         await Task.Delay(6000);
-        await LoadGame("JumpingJack.z80");
+        await LoadGame("ManicMiner.z80");
     }
 
     private async Task LoadGame(string filename)
