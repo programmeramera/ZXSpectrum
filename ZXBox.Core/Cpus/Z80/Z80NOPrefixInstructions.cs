@@ -6,7 +6,7 @@ public partial class Z80
 {
 
     int tmpw;
-    int tmpAF;
+    byte tmpAF;
     int tmpDE;
     int tmphaltsToInterrupt;
     int tmpport;

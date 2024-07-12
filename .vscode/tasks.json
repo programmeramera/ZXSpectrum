@@ -9,6 +9,19 @@
                 "build",
                 "${workspaceFolder}/Platforms/ZXBox.Monogame/ZXBox.Monogame.csproj"
             ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Restore workloads",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "workload restore"
+            ],
             "problemMatcher": "$msCompile"
         }
     ]

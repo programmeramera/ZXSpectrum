@@ -149,6 +149,7 @@ namespace ZXBox
 
         public override int ReadByteFromMemory(int address)
         {
+            address &= 0xffff;
             if (address < 0x4000) //rom
             {
                 return Roms[rom][address & 0xffff];

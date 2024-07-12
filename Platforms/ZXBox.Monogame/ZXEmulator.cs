@@ -66,7 +66,7 @@ public class ZXEmulator : Game
     {
         var ms = new MemoryStream();
         var handler = FileFormatFactory.GetSnapShotHandler(filename);
-        var stream = new FileStream("Roms/" + filename + ".json", FileMode.Open);
+        var stream = new FileStream("Platforms/ZXBox.Monogame/Roms/" + filename + ".json", FileMode.Open);
         await stream.CopyToAsync(ms);
         var bytes = ms.ToArray();
         handler.LoadSnapshot(bytes, speccy);

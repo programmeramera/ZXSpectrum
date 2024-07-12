@@ -66,9 +66,9 @@ public class ZXSpectrum : Zilog.Z80
     public List<IOutput> OutputHardware = new List<IOutput>();
 
     public int bordercolor = 1;
-    int retvalue = 0xFF;
+    byte retvalue = 0xFF;
     int i = 0;
-    public override int In(int port)
+    public override byte In(int port)
     {
         retvalue = 0xFF;
         for (i = 0; i < InputHardware.Count; i++)
@@ -86,7 +86,7 @@ public class ZXSpectrum : Zilog.Z80
     }
     int activescreen = 0;
     bool disablepaging = false;
-    public override void Out(int Port, int ByteValue, int tStates)
+    public override void Out(int Port, byte ByteValue, int tStates)
     {
         //128k
         if (Port == 0x7ffd)
@@ -104,7 +104,7 @@ public class ZXSpectrum : Zilog.Z80
     }
     int bank = 0;
     int rom = 0;
-    public override void WriteByteToMemory(int address, int bytetowrite)
+    public override void WriteByteToMemory(int address, byte bytetowrite)
     {
 
         if (address < 0x4000) //rom
@@ -142,29 +142,32 @@ public class ZXSpectrum : Zilog.Z80
 
     public override void WriteWordToMemory(int address, int word)
     {
-        WriteByteToMemory(address, word & 0xff);
+        word &= 0xffff;
+        WriteByteToMemory(address, (byte)(word & 0xff));
         address++;
-        WriteByteToMemory(address, word >> 8);
+        WriteByteToMemory(address, (byte)(word >> 8));
     }
 
-    public override int ReadByteFromMemory(int address)
+    public override byte ReadByteFromMemory(int address)
     {
+        address &= 0xffff;
+        byte result = 0x00;
         if (address < 0x4000) //rom
         {
-            return Roms[rom][address & 0xffff];
+            result = Roms[rom][address & 0xffff];
         }
         else if (address >= 0x4000 && address < 0x8000) //Video memory
         {
-            return Banks[5][address - 0x4000];
+            result = Banks[5][address - 0x4000];
         }
         else if (address >= 0x8000 && address < 0xc000) //Bank2
         {
-            return Banks[2][address - 0x8000];
+            result = Banks[2][address - 0x8000];
         }
         else if (address >= 0xc000) //Bank 0 - 7
         {
-            return Banks[bank][address - 0xc000];
+            result = Banks[bank][address - 0xc000];
         }
-        return 0;
+        return (byte)(result & 0xff);
     }
 }

@@ -26,7 +26,7 @@ namespace ZXBox.Hardware.Input
             return KeyBuffer.Any(k => k.ToLower() == key.ToLower());
         }
 
-        public int Input(int Port, int tstates)
+        public byte Input(int Port, int tstates)
         {
 
             if ((Port & 0xFF) == 0xFE)
@@ -66,7 +66,7 @@ namespace ZXBox.Hardware.Input
 
                     if (KeyBuffer.Count() > 0)
                     {
-                        return returnvalue &= ~1;
+                        return (byte)(returnvalue &= ~1);
                     }
 
                 }
@@ -197,7 +197,7 @@ namespace ZXBox.Hardware.Input
                         break;
                 }
 
-                return returnvalue;
+                return (byte)returnvalue;
             }
             return 0xFF;
         }

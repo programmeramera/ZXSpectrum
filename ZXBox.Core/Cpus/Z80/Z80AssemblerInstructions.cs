@@ -8,7 +8,7 @@ namespace Zilog;
 public partial class Z80
 {
 
-    private int[] bitArray = { 1, 2, 4, 8, 16, 32, 64, 128 };
+    private byte[] bitArray = { 1, 2, 4, 8, 16, 32, 64, 128 };
 
     #region Instructions
     //Assembler commands
@@ -31,20 +31,20 @@ public partial class Z80
         WriteWordToMemory(pushsp, word);
     }
 
-    private int RES(int bit, int value, int tstates)
+    private byte RES(byte bit, byte value, int tstates)
     {
         SubtractNumberOfTStatesLeft(tstates);
-        return value & ~bitArray[bit];
+        return (byte)(value & ~bitArray[bit]);
     }
 
     bool rlc;
-    public int RL(int value, int tstates)
+    public byte RL(byte value, int tstates)
     {
         rlc = (value & 0x80) != 0;
 
         if (fC)
         {
-            value = (value << 1) | 0x01;
+            value = (byte)((value << 1) | 0x01);
         }
         else
         {
@@ -87,19 +87,19 @@ public partial class Z80
         fH = false;
         fC = c;
         SubtractNumberOfTStatesLeft(4);
-        A = rlcavalue;
+        A = (byte)rlcavalue;
     }
 
-    int sbc8a;
-    int sbc8c;
-    int value;
-    int sbc8truncated;
-    private int SBC8(int b, int tstates)
+    byte sbc8a;
+    byte sbc8c;
+    byte value;
+    byte sbc8truncated;
+    private byte SBC8(byte b, int tstates)
     {
         sbc8a = A;
-        sbc8c = fC ? 1 : 0;
-        value = sbc8a - b - sbc8c;
-        sbc8truncated = value & 0xff;
+        sbc8c = (byte)(fC ? 1 : 0);
+        value = (byte)(sbc8a - b - sbc8c);
+        sbc8truncated = (byte)(value & 0xff);
 
         fS = ((sbc8truncated & F_S) != 0);
         f3 = ((sbc8truncated & F_3) != 0);
@@ -138,13 +138,13 @@ public partial class Z80
     }
 
     bool rlcc;
-    public int RLC(int value, int tstates)
+    public byte RLC(byte value, int tstates)
     {
         rlcc = (value & 0x80) != 0;
 
         if (rlcc)
         {
-            value = (value << 1) | 0x01;
+            value = (byte)((value << 1) | 0x01);
         }
         else
         {
@@ -188,17 +188,17 @@ public partial class Z80
         fH = false;
         fC = rlac;
         SubtractNumberOfTStatesLeft(4);
-        A = rlavalue;
+        A = (byte)rlavalue;
     }
 
     bool rrc;
-    public int RR(int value, int tstates)
+    public byte RR(byte value, int tstates)
     {
         rrc = (value & 0x01) != 0;
 
         if (fC)
         {
-            value = (value >> 1) | 0x80;
+            value = (byte)((value >> 1) | 0x80);
         }
         else
         {
@@ -241,7 +241,7 @@ public partial class Z80
 
         rrdm = (rrdm >> 4) | (rrdvalue << 4);
         rrdvalue = (rrdvalue & 0xf0) | (rrdq & 0x0f);
-        WriteByteToMemory(HL, rrdm);
+        WriteByteToMemory(HL, (byte)rrdm);
 
         fS = ((rrdvalue & F_S) != 0);
         f3 = ((rrdvalue & F_3) != 0);
@@ -251,7 +251,7 @@ public partial class Z80
         fH = false;
         fN = false;
         SubtractNumberOfTStatesLeft(18);
-        A = rrdvalue;
+        A = (byte)rrdvalue;
     }
     int rrcavalue; bool rrcac;
     public void RRCA()
@@ -275,17 +275,17 @@ public partial class Z80
         fC = rrcac;
 
         SubtractNumberOfTStatesLeft(4);
-        A = rrcavalue;
+        A = (byte)rrcavalue;
     }
 
     bool rrcc;
-    public int RRC(int value, int tstates)
+    public byte RRC(byte value, int tstates)
     {
         rrcc = (value & 0x01) != 0;
 
         if (rrcc)
         {
-            value = (value >> 1) | 0x80;
+            value = (byte)((value >> 1) | 0x80);
         }
         else
         {
@@ -327,7 +327,7 @@ public partial class Z80
         fC = (rrac);
 
         SubtractNumberOfTStatesLeft(4);
-        A = rravalue;
+        A = (byte)rravalue;
     }
     int rldm; int rldq; int rldvalue;
     public void RLD()
@@ -338,7 +338,7 @@ public partial class Z80
 
         rldm = (rldm << 4) | (rldvalue & 0x0f);
         rldvalue = (rldvalue & 0xf0) | (rldq >> 4);
-        WriteByteToMemory(HL, rldm & 0xff);
+        WriteByteToMemory(HL, (byte)(rldm & 0xff));
 
         fS = ((rldvalue & F_S) != 0);
         f3 = ((rldvalue & F_3) != 0);
@@ -349,14 +349,14 @@ public partial class Z80
         fN = false;
 
         SubtractNumberOfTStatesLeft(18);
-        A = rldvalue;
+        A = (byte)rldvalue;
     }
 
     bool srac;
-    public int SRA(int value, int tstates)
+    public byte SRA(byte value, int tstates)
     {
         srac = (value & 0x01) != 0;
-        value = (value >> 1) | (value & 0x80);
+        value = (byte)((value >> 1) | (value & 0x80));
 
         fS = ((value & F_S) != 0);
         f3 = ((value & F_3) != 0);
@@ -392,7 +392,7 @@ public partial class Z80
     //}
 
     int xornewvalue;
-    public void XOR(int value, int tstates)
+    public void XOR(byte value, int tstates)
     {
         xornewvalue = (A ^ value) & 0xff;
 
@@ -407,14 +407,14 @@ public partial class Z80
 
         SubtractNumberOfTStatesLeft(tstates);
 
-        A = xornewvalue;
+        A = (byte)xornewvalue;
     }
 
     bool srlc;
-    private int SRL(int value, int tstates)
+    private byte SRL(byte value, int tstates)
     {
         srlc = (value & 0x01) != 0;
-        value = value >> 1;
+        value = (byte)(value >> 1);
 
         fS = ((value & F_S) != 0);
         f3 = ((value & F_3) != 0);
@@ -430,10 +430,10 @@ public partial class Z80
     }
 
     bool slac;
-    public int SLA(int value, int tstates)
+    public byte SLA(byte value, int tstates)
     {
         slac = (value & 0x80) != 0;
-        value = (value << 1) & 0xff;
+        value = (byte)((value << 1) & 0xff);
 
         fS = ((value & F_S) != 0);
         f3 = ((value & F_3) != 0);
@@ -448,10 +448,10 @@ public partial class Z80
         return value;
     }
 
-    private int SET(int bit, int value, int tstates)
+    private byte SET(byte bit, byte value, int tstates)
     {
         SubtractNumberOfTStatesLeft(tstates);
-        return value | bitArray[bit];
+        return (byte)(value | bitArray[bit]);
     }
 
     public void RET(bool condition, int tstates, int notmettstates)
@@ -467,13 +467,14 @@ public partial class Z80
         }
     }
 
-    int popsp; int popt;
-    public int POP()
+    int popsp; 
+    byte popt;
+    public byte POP()
     {
         popsp = SP;
         popt = ReadByteFromMemory(popsp);
         popsp++;
-        popt |= (ReadByteFromMemory(popsp & 0xffff) << 8);
+        popt = (byte)(popt | ReadByteFromMemory(popsp & 0xffff));
         SP = (++popsp & 0xffff);
         return popt;
 
@@ -484,7 +485,7 @@ public partial class Z80
 
     public void OUTI()
     {
-        B = DEC8(B, 0);
+        B = (byte)DEC8(B, 0);
 
         SubtractNumberOfTStatesLeft(9);
         Out(BC, ReadByteFromMemory(HL), NumberOfTstates - Math.Abs(_numberOfTStatesLeft));
@@ -507,10 +508,10 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(7);
     }
 
-    int outdvalue;
+    byte outdvalue;
     public void OUTD()
     {
-        B = DEC8(B, 0);
+        B = (byte)DEC8(B, 0);
 
         outdvalue = ReadByteFromMemory(HL);
         SubtractNumberOfTStatesLeft(9);
@@ -533,12 +534,12 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(7);
     }
 
-    int otirvalue;
+    byte otirvalue;
     public void OTIR()
     {
         otirvalue = ReadByteFromMemory(HL);
         SubtractNumberOfTStatesLeft(9);
-        B = DEC8(B, 0);
+        B = (byte)DEC8(B, 0);
         Out(BC, otirvalue, NumberOfTstates - Math.Abs(_numberOfTStatesLeft));
         HL = INC16(HL, 0);
 
@@ -587,10 +588,10 @@ public partial class Z80
         }
     }
 
-    int orvalue;
-    public void OR(int b, int tstates)
+    byte orvalue;
+    public void OR(byte b, int tstates)
     {
-        orvalue = A | b;
+        orvalue = (byte)(A | b);
 
         fS = (orvalue & F_S) != 0;
         f3 = (orvalue & F_3) != 0;
@@ -609,7 +610,7 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(4);
     }
 
-    int negtmp;
+    byte negtmp;
     public void NEG()
     {
         negtmp = A;
@@ -619,7 +620,7 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(8);
     }
 
-    int lddmemval; int lddn;
+    byte lddmemval; int lddn;
     public void LDD()
     {
         lddmemval = ReadByteFromMemory(HL);
@@ -705,7 +706,7 @@ public partial class Z80
     // int ldimemval = 0;
     public void LDI()
     {
-        int ldimemval = ReadByteFromMemory(HL);
+        byte ldimemval = ReadByteFromMemory(HL);
         WriteByteToMemory(DE, ldimemval);
         DE = INC16(DE, 0);
         HL = INC16(HL, 0);
@@ -832,7 +833,7 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(ldir_local_tstates);
     }
 
-    int ldarvalue;
+    byte ldarvalue;
     private void LDAR()
     {
         ldarvalue = R;
@@ -848,7 +849,7 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(9);
         A = ldarvalue;
     }
-    int ldaivalue;
+    byte ldaivalue;
     public void LDAI()
     {
         ldaivalue = I;
@@ -872,12 +873,12 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(tstates);
     }
 
-    private int Sign(int nn)
+    private byte Sign(byte nn)
     {
-        return nn - ((nn & 128) << 1);
+        return (byte)(nn - ((nn & 128) << 1));
     }
 
-    public void JR(bool argument, int position, int tstates)
+    public void JR(bool argument, byte position, int tstates)
     {
         if (argument)
         {
@@ -886,8 +887,8 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(tstates);
     }
 
-    int inbcvalue;
-    public int INBC(int tstates)
+    byte inbcvalue;
+    public byte INBC(int tstates)
     {
         inbcvalue = In(BC);
 
@@ -917,7 +918,7 @@ public partial class Z80
             SubtractNumberOfTStatesLeft(16);
     }
 
-    int indb;
+    byte indb;
     public void IND(int tstates)
     {
         indb = DEC8(B, 0);
@@ -941,7 +942,7 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(tstates);
     }
 
-    int inib, inival;
+    byte inib, inival;
     public void INI(int tstates)
     {
         inib = DEC8(B, 0);
@@ -981,15 +982,15 @@ public partial class Z80
 
     }
 
-    int addadc8c, addadc8newvalue, addadc8truncated;
-    public int ADDADC8(int a, int b, bool Carry, int tStates)
+    byte addadc8c, addadc8newvalue, addadc8truncated;
+    public byte ADDADC8(byte a, byte b, bool Carry, int tStates)
     {
         addadc8c = 0;
         if (Carry)
-            addadc8c = fC ? 1 : 0; //Add 1 if carry is set
+            addadc8c = (byte)(fC ? 1 : 0); //Add 1 if carry is set
 
-        addadc8newvalue = a + b + addadc8c;
-        addadc8truncated = addadc8newvalue & 0xff;
+        addadc8newvalue = (byte)(a + b + addadc8c);
+        addadc8truncated = (byte)(addadc8newvalue & 0xff);
 
         //Set flags
         fS = ((addadc8truncated & F_S) != 0);
@@ -1028,10 +1029,10 @@ public partial class Z80
         return (addadc16truncated);
     }
 
-    int and8newvalue;
-    public int AND8(int a, int b, int tStates)
+    byte and8newvalue;
+    public byte AND8(byte a, byte b, int tStates)
     {
-        and8newvalue = a & b;
+        and8newvalue = (byte)(a & b);
 
         fS = (and8newvalue & F_S) != 0;
         f3 = (and8newvalue & F_3) != 0;
@@ -1101,10 +1102,10 @@ public partial class Z80
     }
 
     int sllc;
-    private int SLL(int value, int tstates)
+    private byte SLL(byte value, int tstates)
     {
         sllc = (value & 0x80) >> 7;
-        value = ((value << 1) | 1) & 0xff;
+        value = (byte)(((value << 1) | 1) & 0xff);
 
         fS = ((value & F_S) != 0);
         f3 = ((value & F_3) != 0);
@@ -1265,11 +1266,11 @@ public partial class Z80
     }
 
     bool inc8pv, inc8h;
-    private int INC8(int value, int tStates)
+    private byte INC8(byte value, int tStates)
     {
         inc8pv = (value == 0x7f);
         inc8h = (((value & 0x0f) + 1) & F_H) != 0;
-        value = (value + 1) & 0xff;
+        value = (byte)((value + 1) & 0xff);
 
         fS = ((value & F_S) != 0);
         f3 = ((value & F_3) != 0);
@@ -1302,12 +1303,12 @@ public partial class Z80
     /// <param name="value">Value to decrement</param>
     /// <param name="tStates">Number of tstates</param>
     /// <returns>Decremented value</returns>
-    private int DEC8(int value, int tStates)
+    private byte DEC8(byte value, int tStates)
     {
         SubtractNumberOfTStatesLeft(tStates);
         dec8pv = (value == 0x80);
         dev8h = (((value & 0x0f) - 1) & F_H) != 0;
-        value = (value - 1) & 0xff;
+        value = (byte)((value - 1) & 0xff);
 
         fS = ((value & F_S) != 0);
         f3 = ((value & F_3) != 0);
@@ -1370,7 +1371,7 @@ public partial class Z80
     public void CPL()
     {
         SubtractNumberOfTStatesLeft(4);
-        int comp = A ^ 0xff;
+        byte comp = (byte)(A ^ 0xff);
 
         f3 = (comp & F_3) != 0;
         f5 = (comp & F_5) != 0;
@@ -1380,7 +1381,7 @@ public partial class Z80
         A = comp;
     }
 
-    int daaa, daaincrement;
+    byte daaa, daaincrement;
     bool daac;
     /// <summary>
     /// Deciaml Adjust accumulator (4 tstates)
@@ -1417,12 +1418,12 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(4);
     }
 
-    int suba, subsubtracted, subtruncated;
-    public void SUB(int b, int tStates)
+    byte suba, subsubtracted, subtruncated;
+    public void SUB(byte b, int tStates)
     {
         suba = A;
-        subsubtracted = suba - b;
-        subtruncated = subsubtracted & 0xff;
+        subsubtracted = (byte)(suba - b);
+        subtruncated = (byte)(subsubtracted & 0xff);
 
         fS = ((subtruncated & F_S) != 0);
         f3 = ((subtruncated & F_3) != 0);
@@ -1456,7 +1457,7 @@ public partial class Z80
         //}
         //F = f;
 
-        B = (B - 1) & 0xff;
+        B = (byte)((B - 1) & 0xff);
         if (B != 0)
         {
             SubtractNumberOfTStatesLeft(13);

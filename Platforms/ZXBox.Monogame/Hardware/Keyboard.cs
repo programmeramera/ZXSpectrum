@@ -25,7 +25,7 @@ public class Keyboard : GameComponent, IInput{
         oldState = XnaInput.Keyboard.GetState();
     }
     
-    public int Input(int Port, int tstates)
+    public byte Input(int Port, int tstates)
     {
         if ((Port & 0xFF) == 0xFE)
         {
@@ -64,7 +64,7 @@ public class Keyboard : GameComponent, IInput{
 
                 if (KeyBuffer.Count() > 0)
                 {
-                    return returnvalue &= ~1;
+                    return (byte)(returnvalue &= ~1);
                 }
 
             }
@@ -199,7 +199,7 @@ public class Keyboard : GameComponent, IInput{
                     break;
             }
 
-            return returnvalue;
+            return (byte)returnvalue;
         }
         return 0xFF;
     }

@@ -27,7 +27,7 @@ namespace ZXBox.Snapshot
             cpu.HLPrim = snapshotbytes[1] | (snapshotbytes[2] << 8);
             cpu.DEPrim = snapshotbytes[3] | (snapshotbytes[4] << 8);
             cpu.BCPrim = snapshotbytes[5] | (snapshotbytes[6] << 8);
-            cpu.AFPrim = snapshotbytes[7] | (snapshotbytes[8] << 8);
+            cpu.AFPrim = (byte)(snapshotbytes[7] | (snapshotbytes[8] << 8));
             cpu.HL = snapshotbytes[9] | (snapshotbytes[10] << 8);
             cpu.DE = snapshotbytes[11] | (snapshotbytes[12] << 8);
             cpu.BC = snapshotbytes[13] | (snapshotbytes[14] << 8);
@@ -35,7 +35,7 @@ namespace ZXBox.Snapshot
             cpu.IX = snapshotbytes[17] | (snapshotbytes[18] << 8);
             cpu.IFF = cpu.IFF2 = ((snapshotbytes[19] & 0x04) == 0x04);
             cpu.R = snapshotbytes[20];
-            cpu.AF = snapshotbytes[21] | (snapshotbytes[22] << 8);
+            cpu.AF = (byte)(snapshotbytes[21] | (snapshotbytes[22] << 8));
             cpu.SP = snapshotbytes[23] | (snapshotbytes[24] << 8);
             cpu.IM = (byte)(snapshotbytes[25] & 0x03);
             if (cpu.IM > 2)
