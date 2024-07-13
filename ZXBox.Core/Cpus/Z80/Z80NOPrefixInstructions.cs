@@ -202,7 +202,7 @@ public partial class Z80
             case 0xDB:     //IN A,(n)
 
                 tmpport = (A << 8) | GetNextPCByte();
-                A = In(tmpport);
+                A = (byte)In(tmpport);
                 SubtractNumberOfTStatesLeft(11);
                 break;
             case 0x34:  //INC (HL)

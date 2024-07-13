@@ -60,14 +60,14 @@ namespace ZXBox.Core.Tests
                     for (int b = 1; b < rowdata.Length; b++)
                     {
                         if (rowdata[b] != "-1")
-                            ts.Memory[mempos++] = Convert.ToInt32(rowdata[b], 16);
+                            ts.Memory[mempos++] = Convert.ToByte(rowdata[b], 16);
                     }
                 }
             }
             return ts;
         }
 
-        public static TestState ReadOUTFile(string Path,int[] MemoryPreset)
+        public static TestState ReadOUTFile(string Path,byte[] MemoryPreset)
         {
             TextReader tr = new StreamReader(Path);
             string file = tr.ReadToEnd();
@@ -123,7 +123,7 @@ namespace ZXBox.Core.Tests
                     for (int b = 1; b < rowdata.Length; b++)
                     {
                         if (rowdata[b] != "-1")
-                            ts.Memory[mempos++] = Convert.ToInt32(rowdata[b], 16);
+                            ts.Memory[mempos++] = Convert.ToByte(rowdata[b], 16);
                     }
                 }
             }

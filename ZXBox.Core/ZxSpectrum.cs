@@ -104,7 +104,7 @@ public class ZXSpectrum : Zilog.Z80
     }
     int bank = 0;
     int rom = 0;
-    public override void WriteByteToMemory(int address, int bytetowrite)
+    public override void WriteByteToMemory(int address, byte bytetowrite)
     {
 
         if (address < 0x4000) //rom
@@ -142,12 +142,12 @@ public class ZXSpectrum : Zilog.Z80
 
     public override void WriteWordToMemory(int address, int word)
     {
-        WriteByteToMemory(address, word & 0xff);
+        WriteByteToMemory(address, (byte)(word & 0xff));
         address++;
-        WriteByteToMemory(address, word >> 8);
+        WriteByteToMemory(address, (byte)(word >> 8));
     }
 
-    public override int ReadByteFromMemory(int address)
+    public override byte ReadByteFromMemory(int address)
     {
         if (address < 0x4000) //rom
         {

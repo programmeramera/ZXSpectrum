@@ -15,7 +15,7 @@ public partial class Z80
     int index;
     int dvalue;
     int tmp;
-    int tmpValue = 0;
+    byte tmpValue = 0;
     public void DoDDorFDPrefixInstruction(IndexRegistryEnum IRindex)
     {
         ixd = 0;

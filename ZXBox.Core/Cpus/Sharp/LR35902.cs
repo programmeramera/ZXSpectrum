@@ -5,12 +5,12 @@ namespace ZXBox.Core.Cpus.Sharp
 {
     public class LR35902 : Z80
     {
-        public override int ReadByteFromMemory(int address)
+        public override byte ReadByteFromMemory(int address)
         {
             throw new System.NotImplementedException();
         }
 
-        public override void WriteByteToMemory(int address, int bytetowrite)
+        public override void WriteByteToMemory(int address, byte bytetowrite)
         {
             throw new System.NotImplementedException();
         }
@@ -64,7 +64,8 @@ namespace ZXBox.Core.Cpus.Sharp
                         switch (opcode)
                         {
                             case 0x08:
-                                WriteByteToMemory(GetNextPCWord(), SP);
+                                WriteWordToMemory(GetNextPCWord(), SP);
+                                //WriteByteToMemory(GetNextPCWord(), SP);
                                 SubtractNumberOfTStatesLeft(13);
                                 break;
                             case 0x10://STOP
