@@ -101,9 +101,9 @@ namespace ZXBox.Snapshot
 
             var mempos = 27;
 
-            for (ushort a = 0x4001; a < 64 * 1024; a++)
+            for (int a = 0x4001; a < 64 * 1024; a++)
             {
-                snapshotData[mempos++] = (byte)cpu.ReadByteFromMemory(a);
+                snapshotData[mempos++] = (byte)cpu.ReadByteFromMemory((ushort)a);
             }
             //foreach (byte b in cpu.Memory.Skip(0x4000))
             //{

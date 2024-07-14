@@ -43,9 +43,9 @@ namespace ZXBox.Core.Tests
             z80.IY = ts.iy;
 
             //z80.Memory = ts.Memory;
-            for(ushort m=0;m< ts.Memory.Length; m++)
+            for(int m=0;m< ts.Memory.Length; m++)
             {
-                z80.WriteByteToMemory(m, ts.Memory[m]);
+                z80.WriteByteToMemory((ushort)m, ts.Memory[m]);
             }
             z80.PC = ts.pc;
             z80.R = ts.r;
@@ -89,7 +89,7 @@ namespace ZXBox.Core.Tests
             //Assert.AreEqual(ts.end_tstates2, z80.end_tstates2,"tstates2");
 
             bool equalMemory = true;
-            for (ushort a=0;a<ts.Memory.Length;a++)
+            for (int a=0;a<ts.Memory.Length;a++)
             {
                 if (ts.Memory[a] != z80.Memory[a])
                 {
@@ -193,9 +193,9 @@ namespace ZXBox.Core.Tests
             ts.im = z80.IM;
             ts.ix = z80.IX;
             ts.iy = z80.IY;
-            for (ushort m = 0; m < ts.Memory.Length; m++)
+            for (int m = 0; m < ts.Memory.Length; m++)
             {
-                ts.Memory[m] = z80.ReadByteFromMemory(m);
+                ts.Memory[m] = z80.ReadByteFromMemory((ushort)m);
             }
             ts.pc = z80.PC;
             ts.r = z80.R;
