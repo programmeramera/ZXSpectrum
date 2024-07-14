@@ -225,12 +225,6 @@ public abstract partial class Z80
         {
             Registers[R_H] = (byte)(value >> 8);
             Registers[R_L] = (byte)(value & 0xff);
-            //if (value == 23672)
-            //{
-            //    Console.WriteLine("SET hl:" + HL.ToString());
-            //    Console.WriteLine("PC: " + PC.ToString());
-            //    Console.WriteLine("OP: 0x" + opcode.ToString("x"));
-            //}
         }
     }
 
@@ -328,25 +322,25 @@ public abstract partial class Z80
     public byte IXL
     {
         get { return (byte)(IX & 0xff); }
-        set { IX = (byte)((IX & 0xff00) | (value)); }
+        set { IX = (ushort)((IX & 0xff00) | (value)); }
     }
 
     public byte IXH
     {
         get { return (byte)((IX >> 8) & 0xff); }
-        set { IX = (byte)((IX & 0xff) | (value << 8)); }
+        set { IX = (ushort)((IX & 0xff) | (value << 8)); }
     }
 
     public byte IYL
     {
         get { return (byte)(IY & 0xff); }
-        set { IY = (byte)((IY & 0xff00) | (value)); }
+        set { IY = (ushort)((IY & 0xff00) | (value)); }
     }
 
     public byte IYH
     {
         get { return (byte)((IY >> 8) & 0xff); }
-        set { IY = (byte)((IY & 0xff) | (value << 8)); }
+        set { IY = (ushort)((IY & 0xff) | (value << 8)); }
     }
 
     /// <summary>
@@ -364,7 +358,7 @@ public abstract partial class Z80
         get { return ((opcode >> 3) & 7); }
     }
 
-    private bool d
+    private sbyte d
     {
         get { return Sign(ReadByteFromMemory(PC++)); }
     }

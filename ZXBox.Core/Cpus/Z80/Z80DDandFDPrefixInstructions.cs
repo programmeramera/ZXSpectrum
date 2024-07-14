@@ -13,7 +13,7 @@ public partial class Z80
 
     ushort ixd;
     int index;
-    int dvalue;
+    sbyte dvalue;
     ushort tmp;
     byte tmpValue = 0;
     public void DoDDorFDPrefixInstruction(IndexRegistryEnum IRindex)
@@ -73,17 +73,17 @@ public partial class Z80
                 SubtractNumberOfTStatesLeft(14);
                 break;
             case 0x36: //LD (IX+d),n
-                WriteByteToMemory((ushort)(IndexRegistry[index] +(d ? 1 : 0)), GetNextPCByte());
+                WriteByteToMemory((ushort)(IndexRegistry[index] + d), GetNextPCByte());
                 SubtractNumberOfTStatesLeft(19);
                 break;
             case 0x8E:  //ADC A,(IX+d) With PrefixDD
-                A = ADDADC8(A, ReadByteFromMemory((ushort)(IndexRegistry[index] +(d ? 1 : 0))), true, 19);
+                A = ADDADC8(A, ReadByteFromMemory((ushort)(IndexRegistry[index] + d)), true, 19);
                 break;
             //case 0xCE:  //ADC A,n
             //    A = ADDADC8(A, Memory[PC++], true, 7);
             //    break;
             case 0x86: //ADD A,(IX+d)
-                A = ADDADC8(A, ReadByteFromMemory((ushort)(IndexRegistry[index] +(d ? 1 : 0))), false, 19);
+                A = ADDADC8(A, ReadByteFromMemory((ushort)(IndexRegistry[index] + d)), false, 19);
                 break;
             case 0x09://ADD IX,BC	
                 IndexRegistry[index] = ADDADC16(IndexRegistry[index], BC, false, 15);
@@ -98,10 +98,10 @@ public partial class Z80
                 IndexRegistry[index] = ADDADC16(IndexRegistry[index], SP, false, 15);
                 break;
             case 0xA6://AND (IX+d)
-                A = AND8(A, ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0))), 19);
+                A = AND8(A, ReadByteFromMemory((ushort)(IndexRegistry[index] + d)), 19);
                 break;
             case 0xBE://CP (IX+d)
-                CP(ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0))), 19);
+                CP(ReadByteFromMemory((ushort)(IndexRegistry[index] + d)), 19);
                 break;
             case 0xBC://CP IXH*
                 if (IRindex == IndexRegistryEnum.IX)
@@ -116,7 +116,7 @@ public partial class Z80
                     CP(IYL, 7);
                 break;
             case 0x35: //DEC (IX+d)
-                ixd = (ushort)(IndexRegistry[index] + (d ? 1 : 0));
+                ixd = (ushort)(IndexRegistry[index] + d);
                 WriteByteToMemory(ixd, DEC8(ReadByteFromMemory(ixd), 23));
                 break;
             case 0x25:		//DEC IXH*
@@ -141,8 +141,8 @@ public partial class Z80
                 SubtractNumberOfTStatesLeft(23);
                 break;
             case 0x34://INC (IX+d)
-                dvalue = d ? 1 : 0;
-                WriteByteToMemory((ushort)((ushort)(IndexRegistry[index] + dvalue)), INC8(ReadByteFromMemory((ushort)((ushort)(IndexRegistry[index] + dvalue))), 0));
+                dvalue = d;
+                WriteByteToMemory((ushort)(IndexRegistry[index] + dvalue), INC8(ReadByteFromMemory((ushort)(IndexRegistry[index] + dvalue)), 0));
                 SubtractNumberOfTStatesLeft(23);
                 break;
             case 0x24:		    //INC IXH*
@@ -170,11 +170,11 @@ public partial class Z80
             case 0x73:		//LD (IYX + d),E
             case 0x74:		//LD (IYX + d),H
             case 0x75:		//LD (IYX + d),L
-                WriteByteToMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0)), RegisterValueFromOP(0));
+                WriteByteToMemory((ushort)(IndexRegistry[index] + d), RegisterValueFromOP(0));
                 SubtractNumberOfTStatesLeft(19);
                 break;
             case 0x7E://LD A,(IX+d)
-                A = ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0)));
+                A = ReadByteFromMemory((ushort)(IndexRegistry[index] + d));
                 SubtractNumberOfTStatesLeft(19);
                 break;
             case 0x7C:		//LD A,IXH*
@@ -192,7 +192,7 @@ public partial class Z80
                 SubtractNumberOfTStatesLeft(4);
                 break;
             case 0x46:		//LD B,(IX+d)
-                B = ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0)));
+                B = ReadByteFromMemory((ushort)(IndexRegistry[index] + d));
                 SubtractNumberOfTStatesLeft(19);
                 break;
             case 0x44:		 //LD B,IXH*
@@ -211,7 +211,7 @@ public partial class Z80
                 break;
             //C register
             case 0x4E:		//LD C,(IX+d)
-                C = ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0)));
+                C = ReadByteFromMemory((ushort)(IndexRegistry[index] + d));
                 SubtractNumberOfTStatesLeft(19);
                 break;
             case 0x4C:		 //LD C,IXH*
@@ -230,7 +230,7 @@ public partial class Z80
                 break;
             //D Register
             case 0x56:		//LD D,(IX+d)
-                D = ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0)));
+                D = ReadByteFromMemory((ushort)(IndexRegistry[index] + d));
                 SubtractNumberOfTStatesLeft(19);
                 break;
             case 0x54:		//LD D,IXH*
@@ -240,7 +240,7 @@ public partial class Z80
                     D = IYH;
                 SubtractNumberOfTStatesLeft(4);
                 break;
-            case 0x55://LD D,IXL*
+            case 0x55:      //LD D,IXL*
                 if (IRindex == IndexRegistryEnum.IX)
                     D = IXL;
                 else
@@ -249,7 +249,7 @@ public partial class Z80
                 break;
             //E Register
             case 0x5E:		//LD E,(IX+d)
-                E = ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0)));
+                E = ReadByteFromMemory((ushort)(IndexRegistry[index] + d));
                 SubtractNumberOfTStatesLeft(19);
                 break;
             case 0x5C:		 //LD D,IXH*
@@ -268,7 +268,7 @@ public partial class Z80
                 break;
             //H Register
             case 0x66:		//LD H,(IX+d)
-                H = ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0)));
+                H = ReadByteFromMemory((ushort)(IndexRegistry[index] + d));
                 SubtractNumberOfTStatesLeft(19);
                 break;
             case 0x67://LD IXH,A*   
@@ -325,7 +325,7 @@ public partial class Z80
                 break;
             //L Register
             case 0x6E:		//LD L,(IX+d)
-                L = ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0)));
+                L = ReadByteFromMemory((ushort)(IndexRegistry[index] + d));
                 SubtractNumberOfTStatesLeft(19);
                 break;
             case 0x6F://LD IXL,A*
@@ -385,7 +385,7 @@ public partial class Z80
                 SubtractNumberOfTStatesLeft(10);
                 break;
             case 0xB6://OR (IX+d)
-                OR(ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0))), 7);
+                OR(ReadByteFromMemory((ushort)(IndexRegistry[index] + d)), 7);
                 break;
             case 0xB4: //OR IXH*
                 if (IRindex == IndexRegistryEnum.IX)
@@ -400,7 +400,7 @@ public partial class Z80
                     OR(IYL, 7);
                 break;
             case 0xCB:
-                dvalue = d ? 1 : 0;
+                dvalue = d;
                 tmpValue = 0;
                 NextOpcode();
                 switch (opcode)
@@ -998,7 +998,7 @@ public partial class Z80
                 SubtractNumberOfTStatesLeft(15);
                 break;
             case 0x9E:     //SBC A,(IX+d)
-                A = SBC8(ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0))), 19);
+                A = SBC8(ReadByteFromMemory((ushort)(IndexRegistry[index] + d)), 19);
                 break;
             case 0x9C:    //SBC A,IXH*
                 if (IRindex == IndexRegistryEnum.IX)
@@ -1013,7 +1013,7 @@ public partial class Z80
                     A = SBC8(IYL, 4);
                 break;
             case 0x96:     //SUB (IX+d)
-                SUB(ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0))), 7);
+                SUB(ReadByteFromMemory((ushort)(IndexRegistry[index] + d)), 7);
                 break;
             case 0x94:		//SUB IXH*
                 if (IRindex == IndexRegistryEnum.IX)
@@ -1028,7 +1028,7 @@ public partial class Z80
                     SUB(IYL, 4);
                 break;
             case 0xAE:		    //XOR (IX+d)
-                XOR(ReadByteFromMemory((ushort)(IndexRegistry[index] + (d ? 1 : 0))), 19);
+                XOR(ReadByteFromMemory((ushort)(IndexRegistry[index] + d)), 19);
                 break;
             case 0xAC:		//XOR IXH*
                 if (IRindex == IndexRegistryEnum.IX)

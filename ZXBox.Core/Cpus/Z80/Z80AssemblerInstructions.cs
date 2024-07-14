@@ -23,9 +23,6 @@ public partial class Z80
     ushort pushsp;
     public void PUSH(ushort word)
     {
-        //    int sp = ((SP() - 2) & 0xffff);
-        //    SP(sp);
-        //    PokeW(sp, word);
         pushsp = (ushort)(SP - 2 & 0xffff);
         SP = (ushort)pushsp;
         WriteWordToMemory(pushsp, word);
@@ -371,26 +368,6 @@ public partial class Z80
         return (byte)value;
     }
 
-    //public void SUB(int value,int tstates)
-    //{
-    //    int a = A;
-    //    int subtracted = a - value;
-    //    int truncated = wans & 0xff;
-
-    //    fS=((truncated & F_S) != 0);
-    //    f3=((truncated & F_3) != 0);
-    //    f5=((truncated & F_5) != 0);
-    //    fZ=((truncated) == 0);
-    //    fC=((wans & 0x100) != 0);
-    //    fPV=(((a ^ value) & (a ^ truncated) & 0x80) != 0);
-    //    fH=((((a & 0x0f) - (value & 0x0f)) & F_H) != 0);
-    //    fN=true;
-
-    //    SubtractNumberOfTStatesLeft( tstates;
-
-    //    A=truncated;
-    //}
-
     int xornewvalue;
     public void XOR(int value, int tstates)
     {
@@ -476,10 +453,6 @@ public partial class Z80
         popt |= (ushort)(ReadByteFromMemory((ushort)(popsp & 0xffff)) << 8);
         SP = (ushort)(++popsp & 0xffff);
         return popt;
-
-        //int retval = ReadWordFromMemory(SP);
-        //SP=(SP+2 & 0xffff);
-        //return retval;
     }
 
     public void OUTI()
@@ -684,26 +657,8 @@ public partial class Z80
         HL = (ushort)lddrfrom;
         BC = (ushort)lddrcount;
         SubtractNumberOfTStatesLeft(lddr_local_tstates);
-        //int tstates = (5 + 16 * (BC)); 
-        //int tmp1 = DE; 
-        //int tmp2 = HL;	// LDDR - ok
-        //Refresh(-2);
-        //for (int n = (BC); n > 0; n--)
-        //{
-        //    WriteByteToMemory(tmp1--, ReadByteFromMemory(tmp2--));
-        //    Refresh(2);
-        //}
-        //E = tmp1 & 0xff; 
-        //D = tmp1 >> 8; 
-        //B = C = 0; 
-        //L = tmp2 & 0xff; 
-        //H = tmp2 >> 8; 
-        //F &= 0xe9;
-
-        //SubtractNumberOfTStatesLeft( tstates;
     }
 
-    // int ldimemval = 0;
     public void LDI()
     {
         int ldimemval = ReadByteFromMemory(HL);
@@ -733,27 +688,6 @@ public partial class Z80
         ldirdest = DE;
         ldirfrom = HL;
         Refresh(-2);
-
-        //var timeleft = NumberOfTStatesLeft/21;
-        //int lenght = count;
-        //if (timeleft < count)
-        //{
-        //    lenght = timeleft;
-        //    if (lenght == 0) //Always let it run once
-        //    {
-        //        lenght = 1;
-        //    }
-        //}
-
-        ////Buffer.BlockCopy(Memory, from * sizeof(int), Memory, dest * sizeof(int), lenght * sizeof(int));
-        //Array.Copy(Memory, from , Memory, dest , lenght);
-
-        //count = (count - lenght) & 0xffff;
-        //from = (from + lenght) & 0xffff;
-        //dest = (dest + lenght) & 0xffff;
-
-        //_local_tstates = 21 * lenght;
-        //Refresh(2 * lenght);
 
         do
         {
@@ -788,48 +722,6 @@ public partial class Z80
         DE = ldirdest;
         HL = ldirfrom;
         BC = ldircount;
-
-        /*int tstates = 0;
-        int tmp1 = DE; 
-        int tmp2 = HL;
-        int nvalue = 0;
-        int count = BC;
-        Refresh(-2);
-        do //            for (int n = (BC); n > 0; n--)
-        {
-            int b = ReadByteFromMemory(tmp2);
-            WriteByteToMemory(tmp1, b);
-            tmp1 = (tmp1 + 1) & 0xffff; 
-            tmp2 = (tmp2 + 1) & 0xffff;
-            nvalue = b + A;
-            Refresh(2);
-            tstates += (21);
-            if (interruptTriggered(tstates))
-            {
-                break;
-            }
-        }while (count != 0);
-
-        if (count != 0)
-        {
-            PC = PC - 2;
-            fH = false;
-            fN = false;
-            fPV = true;
-        }
-        else
-        {
-            tstates += (-5);
-            f5=((nvalue & 0x01)==1);
-            fH=false;
-            f3=((nvalue>>3 & 0x01)==1);
-            fPV = (BC != 0);
-        }
-        E = tmp1 & 0xff;
-        D = tmp1 >> 8;
-        //B = C = 0; 
-        L = tmp2 & 0xff;
-        H = tmp2 >> 8;*/
 
         SubtractNumberOfTStatesLeft(ldir_local_tstates);
     }
@@ -874,16 +766,16 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(tstates);
     }
 
-    private bool Sign(int nn)
+    private sbyte Sign(byte nn)
     {
-        return (nn - ((nn & 128) << 1)) == 1;
+        return (sbyte)(nn);// - ((nn & 128) << 1));
     }
 
     public void JR(bool argument, int position, int tstates)
     {
         if (argument)
         {
-            PC = (ushort)((PC + (Sign(position) ? 1 : 0)) & 0xFFFF);
+            PC = (ushort)((PC + Sign((byte)position)) & 0xFFFF);
         }
         SubtractNumberOfTStatesLeft(tstates);
     }
@@ -1053,29 +945,11 @@ public partial class Z80
     {
         bitbitIsSet = (regvalue & bitArray[bit]) != 0;
 
-        //fN = false;
-        //fH = true;
-        //if (bit == 3)
-        //    f3 = bitIsSet;
-        //if (bit == 5)
-        //    f5 = bitIsSet;
-        //fS = ((bit == 7) ? bitIsSet : false);
-        //fZ = !bitIsSet;
-        //fPV = !bitIsSet;        
-
         SubtractNumberOfTStatesLeft(tStates);
-        //fN=false;
-        //fH=true;
-        //f3=((regvalue & F_3) != 0);
-        //f5=((regvalue & F_5) != 0);
-        //fS=((bit == F_S) ? bitIsSet : false);
-        //fZ=(!bitIsSet);
-        //fPV=(!bitIsSet);
         F = (byte)((F & F_C) |
                         F_H |
                         (regvalue & (F_3 | F_5)) |
                         ((regvalue & (0x01 << bit)) != 0 ? 0 : (F_PV | F_Z)));
-
     }
 
     bool bitixydbitIsSet;
@@ -1322,11 +1196,6 @@ public partial class Z80
         return value;
     }
 
-    //private int INC16NoFlags(int a) 
-    //{
-    //        return (a + 1) & 0xffff; 
-    //}
-
     private byte INC8NoFlags(byte a)
     {
         return (byte)((a + 1) & 0xff);
@@ -1337,7 +1206,6 @@ public partial class Z80
         return (byte)((a - 1) & 0xff);
     }
 
-    // bool cpdrc; 
     bool cpdrpv;
     /// <summary>
     /// Block compare with decrement
@@ -1442,28 +1310,11 @@ public partial class Z80
 
     public void DNJZ()
     {
-        ////No effects on flags
-        //int f = F;
-
-        //B--;
-        //if (B != 0)
-        //{
-        //    int d = GetNextPCByte();
-        //    PC = (PC + d) & 0xffff;
-        //    SubtractNumberOfTStatesLeft( 13;
-        //}
-        //else
-        //{
-        //    PC = INC16(PC, 0);
-        //    SubtractNumberOfTStatesLeft( 8;
-        //}
-        //F = f;
-
         B = (byte)((B - 1) & 0xff);
         if (B != 0)
         {
             SubtractNumberOfTStatesLeft(13);
-            PC += (ushort)(Sign(GetNextPCByte()) ? 1 : 0);
+            PC = (ushort)(PC + Sign(GetNextPCByte()));
             PC++;
         }
         else

@@ -56,7 +56,7 @@ namespace ZXBox.Core.Tests
                 rowdata = rows[a].Split(' ');
                 if (rowdata[0].Length > 1)
                 {
-                    int mempos = Convert.ToInt32(rowdata[0],16);
+                    int mempos = Convert.ToUInt16(rowdata[0],16);
                     for (int b = 1; b < rowdata.Length; b++)
                     {
                         if (rowdata[b] != "-1")
