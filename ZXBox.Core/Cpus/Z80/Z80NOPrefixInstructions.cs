@@ -5,9 +5,9 @@ namespace Zilog;
 public partial class Z80
 {
 
-    int tmpw;
-    int tmpAF;
-    int tmpDE;
+    ushort tmpw;
+    ushort tmpAF;
+    ushort tmpDE;
     int tmphaltsToInterrupt;
     int tmpport;
 

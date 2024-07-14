@@ -22,7 +22,7 @@ namespace ZXBox.Core.Tests
 
         public static bool TestInstruction(string file)
         {
-            file = $"{Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName}\\Testfiles\\" + file;
+            file = $"{Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName}/Testfiles/" + file;
             ZXSpectrum z80 = new ZXSpectrum();
             z80.Reset();
 
@@ -43,7 +43,7 @@ namespace ZXBox.Core.Tests
             z80.IY = ts.iy;
 
             //z80.Memory = ts.Memory;
-            for(int m=0;m< ts.Memory.Length; m++)
+            for(ushort m=0;m< ts.Memory.Length; m++)
             {
                 z80.WriteByteToMemory(m, ts.Memory[m]);
             }
@@ -53,7 +53,7 @@ namespace ZXBox.Core.Tests
 
             z80.DoInstructions(ts.end_tstates2);
 
-            TestState tsout = TestfileHandler.ReadOUTFile(Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + ".out", ts.Memory);
+            TestState tsout = TestfileHandler.ReadOUTFile(Path.GetDirectoryName(file) + "/" + Path.GetFileNameWithoutExtension(file) + ".out", ts.Memory);
 
             //Compare
             bool result = CoreTest.CompareFunction(tsout, ExtractState(z80));
@@ -89,7 +89,7 @@ namespace ZXBox.Core.Tests
             //Assert.AreEqual(ts.end_tstates2, z80.end_tstates2,"tstates2");
 
             bool equalMemory = true;
-            for (int a=0;a<ts.Memory.Length;a++)
+            for (ushort a=0;a<ts.Memory.Length;a++)
             {
                 if (ts.Memory[a] != z80.Memory[a])
                 {
@@ -193,7 +193,7 @@ namespace ZXBox.Core.Tests
             ts.im = z80.IM;
             ts.ix = z80.IX;
             ts.iy = z80.IY;
-            for (int m = 0; m < ts.Memory.Length; m++)
+            for (ushort m = 0; m < ts.Memory.Length; m++)
             {
                 ts.Memory[m] = z80.ReadByteFromMemory(m);
             }

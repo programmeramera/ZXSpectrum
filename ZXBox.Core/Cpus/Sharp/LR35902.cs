@@ -5,17 +5,17 @@ namespace ZXBox.Core.Cpus.Sharp
 {
     public class LR35902 : Z80
     {
-        public override byte ReadByteFromMemory(int address)
+        public override byte ReadByteFromMemory(ushort address)
         {
             throw new System.NotImplementedException();
         }
 
-        public override void WriteByteToMemory(int address, byte bytetowrite)
+        public override void WriteByteToMemory(ushort address, byte bytetowrite)
         {
             throw new System.NotImplementedException();
         }
 
-        public override void WriteWordToMemory(int address, int word)
+        public override void WriteWordToMemory(ushort address, ushort word)
         {
             throw new System.NotImplementedException();
         }
@@ -95,10 +95,10 @@ namespace ZXBox.Core.Cpus.Sharp
                             case 0xDB://-
                                 break;
                             case 0xE0://LD(FF00 + n),A
-                                WriteByteToMemory(0xFF00 + GetNextPCByte(), A);
+                                WriteByteToMemory((ushort)(0xFF00 + GetNextPCByte()), A);
                                 break;
                             case 0xE2://LD(FF00 + C),A
-                                WriteByteToMemory(0xFF00 + C, A);
+                                WriteByteToMemory((ushort)(0xFF00 + C), A);
                                 break;
                             case 0xE3://-
                                 break;
@@ -118,11 +118,11 @@ namespace ZXBox.Core.Cpus.Sharp
                             case 0xED://-
                                 break;
                             case 0xF0://LD A,(FF00 + n)
-                                A = ReadByteFromMemory(0xFF00 + GetNextPCByte());
+                                A = ReadByteFromMemory((ushort)(0xFF00 + GetNextPCByte()));
                                 SubtractNumberOfTStatesLeft(7);
                                 break;
                             case 0xF2://LD   A,(FF00 + C)
-                                A = ReadByteFromMemory(0xFF00 + C);
+                                A = ReadByteFromMemory((ushort)(0xFF00 + C));
                                 SubtractNumberOfTStatesLeft(7);
                                 break;
                             case 0xF4://-

@@ -8,7 +8,7 @@ public abstract partial class Z80
 
     public void WriteByteToMemoryOverridden(int address, byte b)
     {
-        this.WriteByteToMemory(address, b);
+        this.WriteByteToMemory((ushort)address, b);
     }
 
     public Z80()
@@ -104,20 +104,20 @@ public abstract partial class Z80
     private static int R_H = 0x04;
     private static int R_L = 0x05;
     //Index Registers
-    public int[] IndexRegistry = new int[2];
-    public int IX
+    public ushort[] IndexRegistry = new ushort[2];
+    public ushort IX
     {
         get { return IndexRegistry[(int)IndexRegistryEnum.IX]; }
         set { IndexRegistry[(int)IndexRegistryEnum.IX] = value; }
     }
-    public int IY
+    public ushort IY
     {
         get { return IndexRegistry[(int)IndexRegistryEnum.IY]; }
         set { IndexRegistry[(int)IndexRegistryEnum.IY] = value; }
     }
 
     //Interrupt Register
-    public int I = 0;
+    public byte I = 0;
     public byte[] Registers = new byte[10];
 
     //Registers Prim
@@ -215,11 +215,11 @@ public abstract partial class Z80
     }
 
     //16 bit
-    public int HL
+    public ushort HL
     {
         get
         {
-            return Registers[R_H] << 8 | Registers[R_L];
+            return (ushort)(Registers[R_H] << 8 | Registers[R_L]);
         }
         set
         {
@@ -234,11 +234,11 @@ public abstract partial class Z80
         }
     }
 
-    public int HLPrim
+    public ushort HLPrim
     {
         get
         {
-            return RegitersPrim[R_H] << 8 | RegitersPrim[R_L];
+            return (ushort)(RegitersPrim[R_H] << 8 | RegitersPrim[R_L]);
         }
         set
         {
@@ -247,11 +247,11 @@ public abstract partial class Z80
         }
     }
 
-    public int DE
+    public ushort DE
     {
         get
         {
-            return Registers[R_D] << 8 | Registers[R_E];
+            return (ushort)(Registers[R_D] << 8 | Registers[R_E]);
         }
         set
         {
@@ -260,11 +260,11 @@ public abstract partial class Z80
         }
     }
 
-    public int DEPrim
+    public ushort DEPrim
     {
         get
         {
-            return RegitersPrim[R_D] << 8 | RegitersPrim[R_E];
+            return (ushort)(RegitersPrim[R_D] << 8 | RegitersPrim[R_E]);
         }
         set
         {
@@ -273,11 +273,11 @@ public abstract partial class Z80
         }
     }
 
-    public int BC
+    public ushort BC
     {
         get
         {
-            return Registers[R_B] << 8 | Registers[R_C];
+            return (ushort)(Registers[R_B] << 8 | Registers[R_C]);
         }
         set
         {
@@ -286,11 +286,11 @@ public abstract partial class Z80
         }
     }
 
-    public int BCPrim
+    public ushort BCPrim
     {
         get
         {
-            return RegitersPrim[R_B] << 8 | RegitersPrim[R_C];
+            return (ushort)(RegitersPrim[R_B] << 8 | RegitersPrim[R_C]);
         }
         set
         {
@@ -299,11 +299,11 @@ public abstract partial class Z80
         }
     }
 
-    public int AF
+    public ushort AF
     {
         get
         {
-            return Registers[R_A] << 8 | F;
+            return (ushort)(Registers[R_A] << 8 | F);
         }
         set
         {
@@ -312,11 +312,11 @@ public abstract partial class Z80
         }
     }
 
-    public int AFPrim
+    public ushort AFPrim
     {
         get
         {
-            return RegitersPrim[R_A] << 8 | FPrim;
+            return (ushort)(RegitersPrim[R_A] << 8 | FPrim);
         }
         set
         {
@@ -328,25 +328,25 @@ public abstract partial class Z80
     public byte IXL
     {
         get { return (byte)(IX & 0xff); }
-        set { IX = (IX & 0xff00) | (value); }
+        set { IX = (byte)((IX & 0xff00) | (value)); }
     }
 
     public byte IXH
     {
         get { return (byte)((IX >> 8) & 0xff); }
-        set { IX = (IX & 0xff) | (value << 8); }
+        set { IX = (byte)((IX & 0xff) | (value << 8)); }
     }
 
     public byte IYL
     {
         get { return (byte)(IY & 0xff); }
-        set { IY = (IY & 0xff00) | (value); }
+        set { IY = (byte)((IY & 0xff00) | (value)); }
     }
 
     public byte IYH
     {
         get { return (byte)((IY >> 8) & 0xff); }
-        set { IY = (IY & 0xff) | (value << 8); }
+        set { IY = (byte)((IY & 0xff) | (value << 8)); }
     }
 
     /// <summary>
@@ -364,7 +364,7 @@ public abstract partial class Z80
         get { return ((opcode >> 3) & 7); }
     }
 
-    private int d
+    private bool d
     {
         get { return Sign(ReadByteFromMemory(PC++)); }
     }
@@ -385,52 +385,52 @@ public abstract partial class Z80
     protected byte GetNextPCByte()
     {
         byte b = ReadByteFromMemory(PC);
-        PC = PC + 1 & 0xffff;
+        PC = (ushort)(PC + 1 & 0xffff);
         return b;
     }
-    protected int GetNextPCWord()
+    protected ushort GetNextPCWord()
     {
-        int w = ReadByteFromMemory(PC++);
-        w |= (ReadByteFromMemory(PC++ & 0xffff) << 8);
+        ushort w = ReadByteFromMemory(PC++);
+        w |= (ushort)(ReadByteFromMemory((ushort)(PC++ & 0xffff)) << 8);
         return w;
     }
     #endregion
 
     #region Stack
-    public void StackpushWord(int word)
+    public void StackpushWord(ushort word)
     {
-        int sp = ((SP - 2) & 0xffff);
+        ushort sp = (ushort)((SP - 2) & 0xffff);
         SP = sp;
         WriteWordToMemory(sp, word);
     }
-    public int StackpopWord()
+    public ushort StackpopWord()
     {
-        int w = ReadByteFromMemory(SP);
+        ushort w = ReadByteFromMemory(SP);
         SP++;
-        w |= (ReadByteFromMemory(SP & 0xffff) << 8);
-        SP = (SP + 1 & 0xffff);
+        w |= (ushort)(ReadByteFromMemory((ushort)(SP & 0xffff)) << 8);
+        SP = (ushort)(SP + 1 & 0xffff);
         return w;
     }
     #endregion
 
     #region Memory
-    public abstract void WriteWordToMemory(int address, int word);
+    public abstract void WriteWordToMemory(ushort address, ushort word);
 
-    public abstract void WriteByteToMemory(int address, byte bytetowrite);
+    public abstract void WriteByteToMemory(ushort address, byte bytetowrite);
 
-    public abstract byte ReadByteFromMemory(int address);
+    public abstract byte ReadByteFromMemory(ushort address);
 
-    public int ReadWordFromMemory(int address)
+    public ushort ReadWordFromMemory(ushort address)
     {
-        return (ReadByteFromMemory(address + 1 & 0xffff) << 8 | ReadByteFromMemory(address & 0xffff)) & 0xffff;
+        return (ushort)((ReadByteFromMemory((ushort)(address + 1 & 0xffff)) << 8 | ReadByteFromMemory((ushort)(address & 0xffff))) & 0xffff);
     }
     #endregion
 
     //Program Counter
-    public int PC;
+    public ushort PC;
     //Stack Pointer
-    public int SP = 0x10000;
-    protected int opcode = 0;
+    public ushort SP = 0xffff;
+    protected ushort opcode = 0;
     protected int _numberOfTStatesLeft;
     // int diff = 0;
     public void SubtractNumberOfTStatesLeft(int tstates = 0)
@@ -461,9 +461,9 @@ public abstract partial class Z80
         set { _R7 = value; }
     }
 
-    public int R
+    public byte R
     {
-        get { return (_R & 0x7f) | _R7; }
+        get { return (byte)((_R & 0x7f) | _R7); }
         set
         {
             _R = value;
@@ -513,15 +513,15 @@ public abstract partial class Z80
         //Clear Memory
         for (int a = 16384; a < 3 * 16384; a++)
         {
-            WriteByteToMemory(a, 0);
+            WriteByteToMemory((ushort)a, 0);
         }
     }
 
     //System.Text.StringBuilder sb = new StringBuilder();
     public void NextOpcode()
     {
-        opcode = ReadByteFromMemory(PC) & 0xff;
-        PC = (PC + 1) & 0xffff;
+        opcode = (ushort)(ReadByteFromMemory(PC) & 0xff);
+        PC = (ushort)((PC + 1) & 0xffff);
     }
 
     public int interrupt()
@@ -544,7 +544,7 @@ public abstract partial class Z80
                 PCToStack();
                 IFF = false;
                 IFF2 = false;
-                int t = (I << 8) | 0x00ff;
+                var t = (ushort)((I << 8) | 0x00ff);
                 PC = ReadWordFromMemory(t);
                 return 19;          
         }
