@@ -174,44 +174,44 @@ public abstract partial class Z80
 
     public byte BPrim
     {
-        get { return RegitersPrim[R_B]; }
-        set { RegitersPrim[R_B] = value; }
+        get => RegitersPrim[R_B];
+        set => RegitersPrim[R_B] = value;
     }
 
     public byte CPrim
     {
-        get { return RegitersPrim[R_C]; }
-        set { RegitersPrim[R_C] = value; }
+        get => RegitersPrim[R_C];
+        set => RegitersPrim[R_C] = value;
     }
 
     public byte DPrim
     {
-        get { return RegitersPrim[R_D]; }
-        set { RegitersPrim[R_D] = value; }
+        get => RegitersPrim[R_D];
+        set => RegitersPrim[R_D] = value;
     }
 
     public byte EPrim
     {
-        get { return RegitersPrim[R_E]; }
-        set { RegitersPrim[R_E] = value; }
+        get => RegitersPrim[R_E];
+        set => RegitersPrim[R_E] = value;
     }
 
     public byte HPrim
     {
-        get { return RegitersPrim[R_H]; }
-        set { RegitersPrim[R_H] = value; }
+        get => RegitersPrim[R_H];
+        set => RegitersPrim[R_H] = value;
     }
 
     public byte LPrim
     {
-        get { return RegitersPrim[R_L]; }
-        set { RegitersPrim[R_L] = value; }
+        get => RegitersPrim[R_L];
+        set => RegitersPrim[R_L] = value;
     }
 
     public byte FPrim
     {
-        get { return Fprim; }
-        set { Fprim = value; }
+        get => Fprim;
+        set => Fprim = value;
     }
 
     //16 bit
@@ -321,26 +321,26 @@ public abstract partial class Z80
 
     public byte IXL
     {
-        get { return (byte)(IX & 0xff); }
-        set { IX = (ushort)((IX & 0xff00) | (value)); }
+        get => (byte)(IX & 0xff);
+        set => IX = (ushort)((IX & 0xff00) | (value));
     }
 
     public byte IXH
     {
-        get { return (byte)((IX >> 8) & 0xff); }
-        set { IX = (ushort)((IX & 0xff) | (value << 8)); }
+        get => (byte)((IX >> 8) & 0xff);
+        set => IX = (ushort)((IX & 0xff) | (value << 8));
     }
 
     public byte IYL
     {
-        get { return (byte)(IY & 0xff); }
-        set { IY = (ushort)((IY & 0xff00) | (value)); }
+        get => (byte)(IY & 0xff);
+        set => IY = (ushort)((IY & 0xff00) | (value));
     }
 
     public byte IYH
     {
-        get { return (byte)((IY >> 8) & 0xff); }
-        set { IY = (ushort)((IY & 0xff) | (value << 8)); }
+        get => (byte)((IY >> 8) & 0xff);
+        set => IY = (ushort)((IY & 0xff) | (value << 8));
     }
 
     /// <summary>
@@ -348,20 +348,11 @@ public abstract partial class Z80
     /// </summary>
     /// <param name="rpos"></param>
     /// <returns></returns>
-    public byte RegisterValueFromOP(int rpos)
-    {
-        return Registers[(opcode >> rpos) & 7];
-    }
+    public byte RegisterValueFromOP(int rpos) => Registers[(opcode >> rpos) & 7];
 
-    public int BitValueFromOP
-    {
-        get { return ((opcode >> 3) & 7); }
-    }
+    public int BitValueFromOP => (opcode >> 3) & 7;
 
-    private sbyte d
-    {
-        get { return Sign(ReadByteFromMemory(PC++)); }
-    }
+    private sbyte d => Sign(ReadByteFromMemory(PC++));
 
     #endregion
 
@@ -435,13 +426,7 @@ public abstract partial class Z80
     public bool[] Parity = new bool[256];
 
     protected int _EndTstates2 = 0;
-    public int EndTstates2
-    {
-        get
-        {
-            return _EndTstates2 + (_numberOfTStatesLeft * -1);
-        }
-    }
+    public int EndTstates2 => _EndTstates2 + (_numberOfTStatesLeft * -1);
     //Interupts and memory
     public bool BlockINT = true;
     public bool IFF = false;
@@ -451,8 +436,8 @@ public abstract partial class Z80
     public int _R = 0;
     public int R7
     {
-        get { return _R7; }
-        set { _R7 = value; }
+        get => _R7;
+        set => _R7 = value;
     }
 
     public byte R
@@ -467,9 +452,7 @@ public abstract partial class Z80
 
     public void Refresh(int t)
     {
-        //            _R += t;
         _R = (byte)(((_R + 1) & 0x7F) | (_R & 0x80));
-        //SubtractNumberOfTStatesLeft( 1;
     }
 
     public void Reset()
