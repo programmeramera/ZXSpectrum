@@ -6,9 +6,9 @@ namespace Zilog;
 public abstract partial class Z80
 {
 
-    public void WriteByteToMemoryOverridden(int address, byte b)
+    public void WriteByteToMemoryOverridden(ushort address, byte b)
     {
-        this.WriteByteToMemory((ushort)address, b);
+        this.WriteByteToMemory(address, b);
     }
 
     public Z80()
@@ -107,13 +107,13 @@ public abstract partial class Z80
     public ushort[] IndexRegistry = new ushort[2];
     public ushort IX
     {
-        get { return IndexRegistry[(int)IndexRegistryEnum.IX]; }
-        set { IndexRegistry[(int)IndexRegistryEnum.IX] = value; }
+        get => IndexRegistry[(int)IndexRegistryEnum.IX];
+        set => IndexRegistry[(int)IndexRegistryEnum.IX] = value;
     }
     public ushort IY
     {
-        get { return IndexRegistry[(int)IndexRegistryEnum.IY]; }
-        set { IndexRegistry[(int)IndexRegistryEnum.IY] = value; }
+        get => IndexRegistry[(int)IndexRegistryEnum.IY];
+        set => IndexRegistry[(int)IndexRegistryEnum.IY] = value;
     }
 
     //Interrupt Register
@@ -126,50 +126,50 @@ public abstract partial class Z80
     //8bit
     public byte A
     {
-        get { return Registers[R_A]; }
-        set { Registers[R_A] = value; }
+        get => Registers[R_A];
+        set => Registers[R_A] = value;
     }
 
     public byte B
     {
-        get { return Registers[R_B]; }
-        set { Registers[R_B] = value; }
+        get => Registers[R_B];
+        set => Registers[R_B] = value;
     }
 
     public byte C
     {
-        get { return Registers[R_C]; }
-        set { Registers[R_C] = value; }
+        get => Registers[R_C];
+        set => Registers[R_C] = value;
     }
 
     public byte D
     {
-        get { return Registers[R_D]; }
-        set { Registers[R_D] = value; }
+        get => Registers[R_D];
+        set => Registers[R_D] = value;
     }
 
     public byte E
     {
-        get { return Registers[R_E]; }
-        set { Registers[R_E] = value; }
+        get => Registers[R_E];
+        set => Registers[R_E] = value;
     }
 
     public byte H
     {
-        get { return Registers[R_H]; }
-        set { Registers[R_H] = value; }
+        get => Registers[R_H];
+        set => Registers[R_H] = value;
     }
 
     public byte L
     {
-        get { return Registers[R_L]; }
-        set { Registers[R_L] = value; }
+        get => Registers[R_L];
+        set => Registers[R_L] = value;
     }
 
     public byte APrim
     {
-        get { return RegitersPrim[R_A]; }
-        set { RegitersPrim[R_A] = value; }
+        get => RegitersPrim[R_A];
+        set => RegitersPrim[R_A] = value;
     }
 
     public byte BPrim
