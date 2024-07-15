@@ -177,7 +177,7 @@ public class Screen : IOutput
     private List<Border> border = new List<Border>();
     public uint LastBorderColor;
 
-    public void Output(int Port, int ByteValue, int tState)
+    public void Output(ushort Port, byte ByteValue, int tState)
     {
         if ((Port & 0x0001) == 0)
         {

@@ -8,24 +8,19 @@ namespace ZXBox.Monogame.Hardware;
 
 public class Keyboard : GameComponent, IInput{
     private XnaInput.KeyboardState oldState;
-    public List<string> KeyBuffer = new List<string>();
-    // int NoKeyCounter = 0;
-    // bool SymbolShift = false;
-    // int sectionnumber = 1;
     bool up = false;
     bool down = false;
     bool left = false;
     bool right = false;
-    // bool fire = false;
-    
     public Keyboard(Game game) : base(game) {}
 
     public override void Update(GameTime gameTime)
     {
         oldState = XnaInput.Keyboard.GetState();
     }
+    public void AddTStates(int tstates) { }
     
-    public int Input(int Port, int tstates)
+    public byte Input(ushort Port, int tstates)
     {
         if ((Port & 0xFF) == 0xFE)
         {
@@ -56,18 +51,7 @@ public class Keyboard : GameComponent, IInput{
             }
 
             // bool symbol = false;
-            int returnvalue = 0xFF;
-
-            //Special cace for any key
-            if (((Port >> 8) & 0xFF) == 0x01 || ((Port >> 8) & 0xFF) == 0x00 || ((Port >> 8) & 0xFF) == 0x02)
-            {   //Check for any key including joy, we might need to add more joy buttons later on
-
-                if (KeyBuffer.Count() > 0)
-                {
-                    return returnvalue &= ~1;
-                }
-
-            }
+            var returnvalue = 0xFF;
 
             switch ((Port >> 8) & 0x0F)
             {
@@ -199,7 +183,7 @@ public class Keyboard : GameComponent, IInput{
                     break;
             }
 
-            return returnvalue;
+            return (byte)returnvalue;
         }
         return 0xFF;
     }

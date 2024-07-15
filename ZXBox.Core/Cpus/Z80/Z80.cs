@@ -34,12 +34,12 @@ public abstract partial class Z80
 
     #region Ports
     //Override these
-    public virtual int In(int port)
+    public virtual byte In(ushort port)
     {
         return 0xff;
     }
 
-    public virtual void Out(int Port, int ByteValue, int tStates)
+    public virtual void Out(ushort Port, byte ByteValue, int tStates)
     {
     }
 

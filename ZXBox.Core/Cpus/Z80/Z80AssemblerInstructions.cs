@@ -216,12 +216,11 @@ public partial class Z80
         SubtractNumberOfTStatesLeft(11);
     }
 
-    int rrdvalue; int rrdm; int rrdq;
     public void RRD()
     {
         var rrdvalue = A;
         var rrdm = ReadByteFromMemory(HL);
-        rrdq = rrdm;
+        var rrdq = rrdm;
 
         rrdm = (byte)((rrdm >> 4) | (rrdvalue << 4));
         rrdvalue = (byte)((rrdvalue & 0xf0) | (rrdq & 0x0f));

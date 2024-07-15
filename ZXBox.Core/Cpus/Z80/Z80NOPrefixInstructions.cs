@@ -8,8 +8,6 @@ public partial class Z80
     ushort tmpAF;
     ushort tmpDE;
     int tmphaltsToInterrupt;
-    int tmpport;
-
     public void DoNoPrefixInstruction()
     {
         switch (opcode)
@@ -209,9 +207,8 @@ public partial class Z80
                 Halt();
                 break;
             case 0xDB:      //IN A,(n)
-
-                tmpport = (A << 8) | GetNextPCByte();
-                A = (byte)In(tmpport);
+                byte tmpport = (byte)((A << 8) | GetNextPCByte());
+                A = In(tmpport);
                 SubtractNumberOfTStatesLeft(11);
                 break;
             case 0x34:      //INC (HL)

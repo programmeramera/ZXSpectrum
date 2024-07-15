@@ -66,11 +66,10 @@ public class ZXSpectrum : Zilog.Z80
     public List<IOutput> OutputHardware = new List<IOutput>();
 
     public int bordercolor = 1;
-    int retvalue = 0xFF;
     int i = 0;
-    public override int In(int port)
+    public override byte In(ushort port)
     {
-        retvalue = 0xFF;
+        byte retvalue = 0xFF;
         for (i = 0; i < InputHardware.Count; i++)
         {
             retvalue &= InputHardware[i].Input(port, NumberOfTstates - Math.Abs(_numberOfTStatesLeft));
@@ -86,7 +85,7 @@ public class ZXSpectrum : Zilog.Z80
     }
     int activescreen = 0;
     bool disablepaging = false;
-    public override void Out(int Port, int ByteValue, int tStates)
+    public override void Out(ushort Port, byte ByteValue, int tStates)
     {
         //128k
         if (Port == 0x7ffd)
